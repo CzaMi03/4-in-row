@@ -3,9 +3,11 @@ const COLS = 7;
 let currentPlayer = 1;
 let board = [];
 let nicknames = ["Red", "Yellow"];
+let playerMoves = [0, 0]; // Separate move count for each player [player1moves, player2moves]
 
 function createBoard() {
     board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+    playerMoves = [0, 0]; // Reset move counts for both players
     const gameBoard = document.getElementById('game-board');
     gameBoard.innerHTML = '';
     // Render column buttons
@@ -55,9 +57,14 @@ function handleColumnClick(e) {
     for (let row = ROWS - 1; row >= 0; row--) {
         if (board[row][col] === 0) {
             board[row][col] = currentPlayer;
+            playerMoves[currentPlayer - 1]++; // Increment moves for current player
             updateBoard();
             if (checkWin(row, col)) {
-                showWinModal(`${nicknames[currentPlayer-1]} wins!`);
+                const winner = nicknames[currentPlayer-1];
+                const winnerMoves = playerMoves[currentPlayer - 1];
+                saveHighscore(winner, winnerMoves).then(() => {
+                    showWinModal(`${winner} wins in ${winnerMoves} moves!`);
+                });
                 disableBoard();
             } else {
                 currentPlayer = 3 - currentPlayer;
@@ -73,12 +80,23 @@ function handleColumnClick(e) {
     alert('This column is full!');
 }
 
-function showWinModal(message) {
+async function showWinModal(message) {
     const modal = document.getElementById('win-modal');
     const msg = document.getElementById('win-message');
-    if (modal && msg) {
+    const highscoresTable = document.getElementById('highscores-table');
+    
+    if (modal && msg && highscoresTable) {
         msg.textContent = message;
         modal.style.display = 'flex';
+        
+        // Update highscores table
+        const highscores = await getHighscores();
+        highscoresTable.innerHTML = highscores.map(score => `
+            <tr>
+                <td style="padding:8px;">${score.nickname}</td>
+                <td style="text-align:right;padding:8px;">${score.moves}</td>
+            </tr>
+        `).join('');
     }
 }
 function hideWinModal() {

@@ -27,10 +27,24 @@
     <div id="win-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:3000;align-items:center;justify-content:center;">
       <div style="background:#23235b;padding:32px 24px;border-radius:16px;box-shadow:0 4px 32px #000a;display:flex;flex-direction:column;gap:16px;min-width:260px;align-items:center;">
         <div id="win-message" style="color:#fddb3a;font-size:1.3rem;font-weight:bold;"></div>
+        <div id="highscores" style="width:100%;margin:16px 0;">
+          <h3 style="color:#fddb3a;text-align:center;margin-bottom:12px;">Highscores</h3>
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th style="color:#fbb034;text-align:left;padding:8px;">Player</th>
+                <th style="color:#fbb034;text-align:right;padding:8px;">Moves</th>
+              </tr>
+            </thead>
+            <tbody id="highscores-table" style="color:#fff;">
+            </tbody>
+          </table>
+        </div>
         <button id="play-again" style="padding:10px 24px;border-radius:8px;background:#fddb3a;font-weight:bold;font-size:1.1rem;border:none;cursor:pointer;">Play again</button>
         <button id="restart-nicknames" style="padding:10px 24px;border-radius:8px;background:#fbb034;font-weight:bold;font-size:1.1rem;border:none;cursor:pointer;">Restart with new nicknames</button>
       </div>
     </div>
+    <script src="js/api.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

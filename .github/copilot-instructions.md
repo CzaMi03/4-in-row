@@ -3,6 +3,11 @@
 applyTo: '**'
 ---
 [Instructions for creating a web application – "Connect Four" game]
+0. **General gudelines**
+   - The application should be a web-based game of "Connect Four".
+   - The code should be clean, well-structured, and easy to read. Max line in one codee file is 500.
+   - Use modern web technologies (e.g. React, Vue, Svelte, or plain
+   - Always check file task.md and move completed tasks to completed tasks section. 
 
 1. **Project goal**
    - Create a modern web application implementing the "Connect Four" game.
