@@ -57,11 +57,15 @@ function handleColumnClick(e) {
             board[row][col] = currentPlayer;
             updateBoard();
             if (checkWin(row, col)) {
-                setTimeout(() => alert(`Player ${currentPlayer} wins!`), 10);
+                setTimeout(() => alert(`${nicknames[currentPlayer-1]} wins!`), 10);
                 disableBoard();
             } else {
                 currentPlayer = 3 - currentPlayer;
                 updateColumnIndicator();
+                // If bot is enabled and it's bot's turn, make bot move
+                if (nicknames[1] === 'Bot' && currentPlayer === 2) {
+                    setTimeout(botMove, 500);
+                }
             }
             return;
         }
@@ -132,10 +136,19 @@ window.onload = () => {
     document.getElementById('restart').style.display = 'none';
     showNicknameModal();
     const form = document.getElementById('nickname-form');
+    const yellowInput = document.getElementById('nickname-yellow');
+    const playBotBtn = document.getElementById('play-bot');
+    playBotBtn.onclick = function() {
+        yellowInput.value = 'Bot';
+        yellowInput.disabled = true;
+        playBotBtn.disabled = true;
+        playBotBtn.textContent = 'Bot enabled';
+    };
     form.onsubmit = function(e) {
         e.preventDefault();
         const red = document.getElementById('nickname-red').value.trim() || 'Red';
-        const yellow = document.getElementById('nickname-yellow').value.trim() || 'Yellow';
+        let yellow = yellowInput.value.trim() || 'Yellow';
+        if (yellowInput.disabled) yellow = 'Bot';
         nicknames = [red, yellow];
         hideNicknameModal();
         currentPlayer = 1;
@@ -147,3 +160,49 @@ window.onload = () => {
         createBoard();
     };
 };
+
+// Simple bot logic: pick a random non-full column
+function botMove() {
+    if (nicknames[1] !== 'Bot' || currentPlayer !== 2) return;
+    // 1. Try to win
+    for (let c = 0; c < COLS; c++) {
+        const row = getAvailableRow(c);
+        if (row !== -1) {
+            board[row][c] = 2;
+            if (checkWin(row, c)) {
+                board[row][c] = 0;
+                handleColumnClick({target: {dataset: {col: c}}});
+                return;
+            }
+            board[row][c] = 0;
+        }
+    }
+    // 2. Block opponent
+    for (let c = 0; c < COLS; c++) {
+        const row = getAvailableRow(c);
+        if (row !== -1) {
+            board[row][c] = 1;
+            if (checkWin(row, c)) {
+                board[row][c] = 0;
+                handleColumnClick({target: {dataset: {col: c}}});
+                return;
+            }
+            board[row][c] = 0;
+        }
+    }
+    // 3. Otherwise, random
+    const available = [];
+    for (let c = 0; c < COLS; c++) {
+        if (board[0][c] === 0) available.push(c);
+    }
+    if (available.length === 0) return;
+    const col = available[Math.floor(Math.random() * available.length)];
+    handleColumnClick({target: {dataset: {col: col}}});
+}
+
+function getAvailableRow(col) {
+    for (let row = ROWS - 1; row >= 0; row--) {
+        if (board[row][col] === 0) return row;
+    }
+    return -1;
+}
