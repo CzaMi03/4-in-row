@@ -16,7 +16,7 @@
         <label style="color:#fbb034;font-weight:bold;">Yellow player nickname:
           <input id="nickname-yellow" type="text" maxlength="20" required style="margin-top:4px;padding:8px;border-radius:8px;border:none;width:100%;" placeholder="Yellow player" />
         </label>
-        <button id="play-bot" type="button" style="margin-top:-4px;margin-bottom:8px;padding:8px 0;border-radius:8px;background:#fbb034;font-weight:bold;font-size:1rem;border:none;cursor:pointer;">Play with bot</button>
+        <button id="play-bot" type="button" style="margin-top:-4px;margin-bottom:8px;padding:8px 0;border-radius:8px;background:#fbb034;font-weight:bold;font-size:1rem;border:none;cursor:pointer;">Play with Bot</button>
         <button type="submit" style="margin-top:8px;padding:10px 0;border-radius:8px;background:#fddb3a;font-weight:bold;font-size:1.1rem;border:none;cursor:pointer;">Start Game</button>
       </form>
     </div>
@@ -24,6 +24,13 @@
     <div id="column-buttons"></div>
     <div id="game-board"></div>
     <button id="restart">Restart</button>
+    <div id="win-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:3000;align-items:center;justify-content:center;">
+      <div style="background:#23235b;padding:32px 24px;border-radius:16px;box-shadow:0 4px 32px #000a;display:flex;flex-direction:column;gap:16px;min-width:260px;align-items:center;">
+        <div id="win-message" style="color:#fddb3a;font-size:1.3rem;font-weight:bold;"></div>
+        <button id="play-again" style="padding:10px 24px;border-radius:8px;background:#fddb3a;font-weight:bold;font-size:1.1rem;border:none;cursor:pointer;">Play again</button>
+        <button id="restart-nicknames" style="padding:10px 24px;border-radius:8px;background:#fbb034;font-weight:bold;font-size:1.1rem;border:none;cursor:pointer;">Restart with new nicknames</button>
+      </div>
+    </div>
     <script src="js/main.js"></script>
 </body>
 </html>

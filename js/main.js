@@ -57,7 +57,7 @@ function handleColumnClick(e) {
             board[row][col] = currentPlayer;
             updateBoard();
             if (checkWin(row, col)) {
-                setTimeout(() => alert(`${nicknames[currentPlayer-1]} wins!`), 10);
+                showWinModal(`${nicknames[currentPlayer-1]} wins!`);
                 disableBoard();
             } else {
                 currentPlayer = 3 - currentPlayer;
@@ -73,6 +73,18 @@ function handleColumnClick(e) {
     alert('This column is full!');
 }
 
+function showWinModal(message) {
+    const modal = document.getElementById('win-modal');
+    const msg = document.getElementById('win-message');
+    if (modal && msg) {
+        msg.textContent = message;
+        modal.style.display = 'flex';
+    }
+}
+function hideWinModal() {
+    const modal = document.getElementById('win-modal');
+    if (modal) modal.style.display = 'none';
+}
 
 function updateBoard() {
     const cells = document.querySelectorAll('.cell');
@@ -110,10 +122,6 @@ function disableBoard() {
     });
 }
 
-
-
-
-
 document.getElementById('restart').onclick = () => {
     currentPlayer = 1;
     createBoard();
@@ -138,11 +146,19 @@ window.onload = () => {
     const form = document.getElementById('nickname-form');
     const yellowInput = document.getElementById('nickname-yellow');
     const playBotBtn = document.getElementById('play-bot');
+    let botActive = false;
     playBotBtn.onclick = function() {
-        yellowInput.value = 'Bot';
-        yellowInput.disabled = true;
-        playBotBtn.disabled = true;
-        playBotBtn.textContent = 'Bot enabled';
+        if (!botActive) {
+            yellowInput.value = 'Bot';
+            yellowInput.disabled = true;
+            playBotBtn.textContent = 'Bot enabled (click to disable)';
+            botActive = true;
+        } else {
+            yellowInput.value = '';
+            yellowInput.disabled = false;
+            playBotBtn.textContent = 'Play with Bot';
+            botActive = false;
+        }
     };
     form.onsubmit = function(e) {
         e.preventDefault();
@@ -152,12 +168,22 @@ window.onload = () => {
         nicknames = [red, yellow];
         hideNicknameModal();
         currentPlayer = 1;
-        // Show board and controls
         document.getElementById('column-buttons').style.display = '';
         document.getElementById('game-board').style.display = '';
         document.getElementById('players-info').style.display = '';
         document.getElementById('restart').style.display = '';
         createBoard();
+    };
+
+    // Win modal buttons
+    document.getElementById('play-again').onclick = () => {
+        hideWinModal();
+        currentPlayer = 1;
+        createBoard();
+    };
+    document.getElementById('restart-nicknames').onclick = () => {
+        hideWinModal();
+        showNicknameModal();
     };
 };
 
